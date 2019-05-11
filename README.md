@@ -12,3 +12,21 @@ Environment variables needed:
 * `fb_projectid` - Project ID for Firebase project.
 * `fb_releasemessage` - Release message you want in the deployment. For example, you could pass in your build id.
 
+As an example for an azure pipeline, this task would execute the container with appropriate volumes and envVars:
+
+```yaml
+    - task: Docker@0
+      displayName: 'Run Firebase Deploy'
+      inputs:
+        containerRegistryType: 'Container Registry'
+        action: 'Run an image'
+        imageName: 'jhardison/firebasetools:latest'
+        volumes: |
+          $(build.sourcesDirectory)/extract:/opt/work
+        detached: false
+        envVars: |
+          fb_ci_token=$(fb_ci_token)
+          fb_projectid=$(fb_projectid)
+          fb_releasemessage=$(Build.BuildId)
+```
+
